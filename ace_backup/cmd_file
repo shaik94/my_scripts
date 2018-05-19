@@ -1,0 +1,20 @@
+show arp
+show action-list
+show conn
+show context
+show crypto certificate all
+show crypto files
+show crypto authgroup  all
+show stats
+show  sticky database
+show probe
+show probe detail
+show rserver
+show rserver detail
+show serverfarm
+show serverfarm detail
+show service-policy
+show service-policy detail
+show service-policy summary
+show ft gr detail
+show interface

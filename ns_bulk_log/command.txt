@@ -1,0 +1,34 @@
+show version
+show ns config
+show hardware
+show interface -summary
+show interface
+show ip
+show feature
+show ns mode
+show license
+show route
+show dns nameServer
+show ntp status
+show run
+show arp 
+show neighbors 
+show ha node
+show ha node -summary
+show servicegroup
+show servicegroup -summary
+show server
+show lb vserver
+show lb vserver -summary
+show connectiontable
+show persistentsessions
+stat ns
+stat cpu
+stat interface
+stat lb vserver -fullValues -detail
+stat cs vserver -fullvalues -detail
+stat dns
+stat http
+show monitor
+show monitor verbose -summary
+show ns ip6

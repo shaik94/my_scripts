@@ -1,0 +1,10 @@
+show arp 
+show neighbors
+show ha node
+show ha node -summary
+show servicegroup
+show servicegroup -summary
+show server
+show lb vserver
+show lb vserver -summary
+show route

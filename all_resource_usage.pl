@@ -45,7 +45,7 @@ foreach my $ace (<HOSTFILE>) {
         my $fname ="_resource_usage";
         open (RSFILE, ">tmp1") or die "Unable to open tmp1, $^E\n";
         chomp $ace1[0];
-        open (OUTPUT, ">ace$fname.csv") or die "Unable to open $ace$fname.csv, $^E\n";
+        open (OUTPUT, ">ace1[0]$fname.csv") or die "Unable to open $ace1[0]$fname.csv, $^E\n";
         my $cmd = new Expect;
         my $command = "ssh -2 -l hussshai.web -o PubkeyAuthentication=no -o StrictHostKeyChecking=no -o NumberOfPasswordPrompts=1 $ace1[0]";
 
@@ -60,11 +60,11 @@ foreach my $ace (<HOSTFILE>) {
                 $cmd->send("$enable_password\n");
         } elsif ($cmd->match eq 'ssh:') {
                 print "$ace1[0] - ssh error: ", $cmd->after, "\n";
-                print ERROROUTPUT "$ace - ssh error: ", $cmd->after, "\n";
+                print ERROROUTPUT "$ace1[0] - ssh error: ", $cmd->after, "\n";
                 next;
         } else {
                 print "$ace1[0] - Unknown ssh error.\n";
-                print ERROROUTPUT "$ace - Unknown ssh error.\n";
+                print ERROROUTPUT "$ace1[0] - Unknown ssh error.\n";
                 next;
         }
 
@@ -73,12 +73,12 @@ foreach my $ace (<HOSTFILE>) {
         if ( $cmd->match) {
                 if ($cmd->match eq 'Permission denied') {
                         print "$ace1[0] - Login failure\n";
-                        print ERROROUTPUT "$ace - Login failure (Password Error)\n";
+                        print ERROROUTPUT "$ace1[0] - Login failure (Password Error)\n";
                         next;
                 }
         } else {
                 print "$ace1[0] - Unable to match command prompt.  Skipping ace1[0].\n";
-                print ERROROUTPUT "$ace - Unable Login Device\n";
+                print ERROROUTPUT "$ace1[0] - Unable Login Device\n";
                 next;
         }
 
@@ -94,7 +94,7 @@ foreach my $ace (<HOSTFILE>) {
         print OUTPUTFILE @configs;
         @configs = ();
         sleep (2);
-		my @contextfile = `cat $ace | grep -iw associate-context | awk '{print \$(2)}'`;
+		my @contextfile = `cat $ace1[0] | grep -iw associate-context | awk '{print \$(2)}'`;
         print @contextfile;
         #my @lines = split (/\n/, $cmd->before);
         my @contexts;
@@ -114,7 +114,7 @@ foreach my $ace (<HOSTFILE>) {
         sleep (1);
         $cmd->send("show resource usage \n");
         $cmd->expect(15, "$ace1[0]/$context_name");
-        open (CONTEXTFL, ">$ace1[0]") or die "Unable To Write File $ace1[0], $^E\n";
+        open (CONTEXTFL, ">$ace1[0]_$context_name") or die "Unable To Write File $ace1[0]_$context_name, $^E\n";
         push (@configs, $cmd->before);
         print CONTEXTFL @configs;
         @configs = ();
@@ -123,7 +123,7 @@ foreach my $ace (<HOSTFILE>) {
 		}
         $cmd->send("exit\n");
         $cmd->expect(15, "#");sleep (1);
-        my @contextfile = `cat $ace1[0] | egrep 'Context|ssl-connections rate|bandwidth|^-|Resource'`;
+        my @contextfile = `cat $ace1[0]_$context_name | egrep 'Context|ssl-connections rate|bandwidth|^-|Resource'`;
         print @contextfile;
         print RSFILE @contextfile;
         }
@@ -174,13 +174,13 @@ foreach my $ace (<HOSTFILE>) {
                 my $pssl = `cat tmp3| awk '{print \$(4)}'`;
                 chomp $cssl;
                 chomp $pssl;
-                                my $ssl_deny = `cat tmp3| awk '{print \$(7)}'`;
-                                chomp $ssl_deny;
+                my $ssl_deny = `cat tmp3| awk '{print \$(7)}'`;
+                chomp $ssl_deny;
                 print OUTPUT "SSL-Connections rate,$pssl, , ,$cssl, , ,$ssl_deny\n";
-                                print OUTPUTSIN "SSL-Connections rate,$pssl, , ,$cssl, , ,$ssl_deny\n";
+                print OUTPUTSIN "SSL-Connections rate,$pssl, , ,$cssl, , ,$ssl_deny\n";
                 }
                 }
-    system ("rm $pwd\/$ace1[0]");
+    #system ("rm $pwd\/$ace1[0]");
     open (CIN, "<ace$fname.csv") or die  "Unable to open $ace1[0]$fname.csv, $^E\n";
     foreach my $countinput (<CIN>) {
         $countinput =~ tr/)\n(//d;
